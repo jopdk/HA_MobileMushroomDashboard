@@ -1,4 +1,6 @@
 # HA_MobileMushroomDashboard
+Inspired by: https://www.youtube.com/watch?v=gouMnPxYHDc
+
 Light Mode
 ![20220413_150403000_iOS](https://user-images.githubusercontent.com/59705799/163212357-954d83a7-8def-41b4-b8ee-ec81a64c4bbb.png)
 
