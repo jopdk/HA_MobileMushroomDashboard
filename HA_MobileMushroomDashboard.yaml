@@ -1,0 +1,1960 @@
+kiosk_mode:
+  hide_header: true
+views:
+  - title: Home
+    path: home
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: entity
+            entity: sensor.nibe_89878_40004
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: template
+            content: |-
+              {%- set state = states('weather.hjem') -%}
+              {% if state == 'clear-night' %} Stjerneklart
+              {% elif state == 'cloudy' %} Overskyet
+              {% elif state == 'exceptional' %} Предупреждение
+              {% elif state == 'fog' %} Туман
+              {% elif state == 'hail' %} Град
+              {% elif state == 'lightning' %} Tordenvejr
+              {% elif state == 'lightning-rainy' %} Trodenvejr med regn
+              {% elif state == 'partlycloudy' %} Delvis Overskyet
+              {% elif state == 'pouring' %} Styrtregn
+              {% elif state == 'rainy' %} Regnvejr
+              {% elif state == 'snowy' %} Snevejr
+              {% elif state == 'snowy-rainy' %} Slud
+              {% elif state == 'sunny' %} Solskin
+              {% elif state == 'windy' %} Blæsevejr
+              {% elif state == 'windy-variant' %} Blæsevejr
+              {% else %} Andet
+              {% endif %}
+            entity: weather.hjem
+            tap_action:
+              action: more-info
+          - type: alarm-control-panel
+            entity: alarm_control_panel.master
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: template
+            double_tap_action:
+              action: none
+            content: >-
+              {{ states.light | selectattr('state','eq','on') | 
+              rejectattr('attributes.is_deconz_group', 'true')|  list |count }}
+            icon: mdi:lightbulb-on-outline
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: light
+            entity: light.alllight
+            name: Alt lys
+            tap_action:
+              action: toggle
+            icon: mdi:lightbulb-multiple-outline
+            use_light_color: true
+        alignment: center
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:home
+            icon_color: light-blue
+            tap_action:
+              action: navigate
+              navigation_path: home
+            layout: vertical
+            primary: Hjem
+          - type: custom:mushroom-template-card
+            icon: mdi:music
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: music
+            icon_color: red
+            primary: Musik
+          - type: custom:mushroom-template-card
+            icon: mdi:shield-outline
+            icon_color: green
+            primary: Alarm
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: security
+          - type: custom:mushroom-template-card
+            icon: mdi:remote-tv
+            primary: TV
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: remote
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+            icon_color: orange
+          - type: custom:mushroom-template-card
+            icon: mdi:cog-outline
+            layout: vertical
+            primary: Teknik
+            tap_action:
+              action: navigate
+              navigation_path: teknik
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Stue
+            entity: light.stue
+            icon: mdi:sofa-outline
+            tap_action:
+              action: navigate
+              navigation_path: livingroom
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_2_Kontor_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.stue', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            icon: mdi:knife
+            entity: light.kokken
+            primary: Køkken
+            tap_action:
+              action: navigate
+              navigation_path: kitchen
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.wi_fi_universal_remote_temperature'')}}°C'
+            icon_color: |-
+              {% if is_state('light.kokken', 'on') %}
+              orange
+              {% endif %}
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Entre
+            entity: light.entre
+            icon: mdi:door
+            tap_action:
+              action: navigate
+              navigation_path: entre
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_13_Entre_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.entre', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            icon: mdi:fridge-outline
+            entity: light.depot
+            tap_action:
+              action: navigate
+              navigation_path: depot
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_11_Depot_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.depot', 'on') %}
+              orange
+              {% endif %}
+            primary: Depot
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Kontor
+            icon: mdi:monitor
+            tap_action:
+              action: navigate
+              navigation_path: kontor
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_2_kontor_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.kontor', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: ''
+            primary: Stearinlys
+            tap_action:
+              action: navigate
+              navigation_path: stearinlys
+            hold_action:
+              action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:countertop-outline
+            entity: light.bryggers_2
+            primary: Bryggers
+            tap_action:
+              action: navigate
+              navigation_path: bryggers
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_14_bryggers_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.bryggers', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            primary: Garage
+            entity: light.garage
+            icon: mdi:garage-variant
+            tap_action:
+              action: navigate
+              navigation_path: garage
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.temperature_26'')}}°C'
+            icon_color: |-
+              {% if is_state('light.garage', 'on') %}
+              orange
+              {% endif %}
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:toilet
+            entity: light.guestbathroom
+            primary: Gæstebadeværelse
+            tap_action:
+              action: navigate
+              navigation_path: guestbathroom
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_3_Lillebad_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.guestbathroom', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            primary: Badeværelse
+            entity: light.masterbathroom
+            icon: mdi:shower
+            tap_action:
+              action: navigate
+              navigation_path: bathroom
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.Gulvvarme_8_stortbad_Temperatur'')}}°C'
+            icon_color: |-
+              {% if is_state('light.masterbathroom', 'on') %}
+              orange
+              {% endif %}
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Udendørs
+            entity: light.udendorslys_alt
+            icon: mdi:tree-outline
+            tap_action:
+              action: navigate
+              navigation_path: outside
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.nibe_89878_40004'')}}°C'
+            icon_color: |-
+              {% if is_state('light.udendorslys_alt', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            icon: mdi:bicycle
+            tap_action:
+              action: navigate
+              navigation_path: cykelskur
+            hold_action:
+              action: toggle
+            secondary: '{{states(''sensor.temperature_46'')}}°C'
+            icon_color: |-
+              {% if is_state('light.cykelskur', 'on') %}
+              orange
+              {% endif %}
+            primary: Cykelskur
+  - theme: Backend-selected
+    title: Stue
+    path: livingroom
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.stue
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.orblampe
+            show_brightness_control: true
+          - type: custom:mushroom-light-card
+            entity: light.snowdrop
+            show_color_control: false
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.color_temperature_light_42
+            show_brightness_control: true
+          - type: custom:mushroom-light-card
+            entity: light.color_temperature_light_14
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: script.stearinlys_on
+            icon_color: amber
+            primary: Tænd Stearinlys
+            layout: vertical
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: script.stearinlys_off
+            icon_color: blue
+            primary: Sluk Stearinlys
+            layout: vertical
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.phlampe
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - hours_to_show: 48
+            graph: line
+            type: sensor
+            entity: sensor.gulvvarme_4_stuealrumkokken_temperatur
+            detail: 1
+            name: Temperatur
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_23
+            name: Temperatur
+          - type: custom:mushroom-entity-card
+            entity: sensor.lightlevel_24
+            name: Lys
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.presence_22
+            name: Bevægelse
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.openclose_14
+            name: Dør
+  - theme: Backend-selected
+    title: Køkken
+    path: kitchen
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.kokken
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+          - type: custom:mushroom-light-card
+            entity: light.phlampe
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Tænd kaffemaskine
+            icon: mdi:coffee
+            entity: switch.kaffemaskine_power
+            icon_color: brown
+            layout: vertical
+          - type: custom:mushroom-entity-card
+            entity: sensor.kaffemaskine_program_progress
+            icon_color: brown
+            name: Nuværende program
+            layout: vertical
+            hide_icon: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-cover-card
+            entity: cover.window_operator_2
+            name: Ovenlys vindue V
+            show_position_control: false
+            show_buttons_control: true
+          - type: custom:mushroom-cover-card
+            entity: cover.window_operator_3
+            name: Ovenlys vindue H
+            show_buttons_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: 'Emhætte '
+            icon: mdi:hvac
+            entity: switch.emhaette_power
+            layout: vertical
+            tap_action:
+              action: toggle
+            icon_color: |-
+              {% if is_state('swich.emhaette_power', 'on') %}
+              orange
+              {% endif %}
+          - type: custom:mushroom-template-card
+            primary: Emhætte lys
+            icon: mdi:lightbulb-outline
+            entity: light.emhaette_light
+            layout: vertical
+            tap_action:
+              action: toggle
+            icon_color: |-
+              {% if is_state('light.emhaette_light', 'on') %}
+              orange
+              {% endif %}
+      - hours_to_show: 48
+        graph: line
+        type: sensor
+        entity: sensor.wi_fi_universal_remote_temperature
+        detail: 1
+        name: Temperatur
+  - theme: Backend-selected
+    title: musik
+    path: music
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:custom-sonos-card
+        headerImage: /local/pics/psy_back.jpg
+        shuffleFavorites: false
+        noMediaText: No media selected
+        allVolumesText: All volumes
+        entityNameRegexToReplace: 'SONOS '
+        entityNameReplacement: ''
+        groupstitle: Grupper
+        Favoritestitle: Favoritter
+  - theme: Backend-selected
+    title: entre
+    path: entre
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.entre
+            show_brightness_control: true
+            name: Alle lamper
+            tap_action:
+              action: toggle
+            hide_state: false
+            use_light_color: false
+            show_color_temp_control: true
+          - type: custom:mushroom-entity-card
+            entity: sensor.gulvvarme_13_entre_temperatur
+            name: Temperatur
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.entre1
+          - type: custom:mushroom-light-card
+            entity: light.entre2
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.entre3
+          - type: custom:mushroom-light-card
+            entity: light.entre4
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.entre5
+          - type: custom:mushroom-light-card
+            entity: light.entre6
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.presence_2
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_3
+            name: Temperatur
+  - theme: Backend-selected
+    title: Udendørs
+    path: outside
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:mushroom-cover-card
+        entity: cover.sunea_io
+        show_position_control: true
+        show_buttons_control: true
+        name: Terasse Markise
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.udendorslys_alt
+            use_light_color: false
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.udendors_terrasse_alrum
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-light-card
+            entity: light.udendors_terrasse_stue
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.udendors_garage_ost
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-light-card
+            entity: light.udendors_garage_vest
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.udendors_bryggers
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-light-card
+            entity: light.udendors_entre
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.udendors_nord
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-light-card
+            entity: light.udendorslyskaeder1
+            show_brightness_control: false
+            tap_action:
+              action: toggle
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+            name: Lyskæde
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_46
+          - type: custom:mushroom-entity-card
+            entity: sensor.temperature_16
+      - show_state: false
+        show_name: true
+        camera_view: live
+        type: picture-entity
+        entity: camera.tapocam1_hd
+        image: https://demo.home-assistant.io/stub_config/bedroom.png
+        name: Bagside kamera
+        camera_image: camera.tapocam1_hd
+  - theme: Backend-selected
+    title: bryggers
+    path: bryggers
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:mushroom-light-card
+        entity: light.bryggers_2
+        name: Bryggers alt lys
+        show_brightness_control: true
+        tap_action:
+          action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.bryggers
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-light-card
+            entity: light.bryggersflowerpot
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.tradfri_motion_sensor
+          - type: custom:mushroom-entity-card
+            entity: sensor.gulvvarme_14_bryggers_temperatur
+            name: Temperatur
+  - theme: Backend-selected
+    title: garage
+    path: garage
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:mushroom-cover-card
+        entity: cover.port
+        name: Garage Port
+        icon: mdi:garage-variant
+        show_buttons_control: true
+        show_position_control: false
+        tap_action:
+          action: toggle
+        hold_action:
+          action: none
+        double_tap_action:
+          action: none
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.garage
+            show_brightness_control: true
+            show_color_control: false
+            show_color_temp_control: true
+            tap_action:
+              action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.openclose_19
+            name: GarageDør
+            icon: mdi:door
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.openclose_21
+            name: Garageport
+            icon: mdi:garage-variant
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.presence_25
+          - hours_to_show: 24
+            graph: line
+            type: sensor
+            entity: sensor.temperature_26
+            detail: 1
+            name: Temperatur
+      - show_state: false
+        show_name: true
+        camera_view: live
+        type: picture-entity
+        entity: camera.isg_cam_01w_prof0_name
+        camera_image: camera.isg_cam_01w_prof0_name
+        name: Garage kamera
+  - theme: Backend-selected
+    title: depot
+    path: depot
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.depot
+            show_brightness_control: true
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.tradfri_motion_sensor_2
+          - hours_to_show: 24
+            graph: line
+            type: sensor
+            entity: sensor.gulvvarme_11_depot_temperatur
+            detail: 1
+            name: Temperatur
+  - theme: Backend-selected
+    title: stearinlys
+    path: stearinlys
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Tænd alle Stearinlys
+            icon: mdi:candle
+            layout: vertical
+            tap_action:
+              action: call-service
+              service: script.stearinlys_on
+              service_data: {}
+              target: {}
+            icon_color: orange
+            entity: script.stearinlys_on
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: script.stearinlys_off
+            primary: Sluk alle Stearinlys
+            layout: vertical
+            icon_color: blue
+            tap_action:
+              action: call-service
+              service: script.stearinlys_off
+              service_data: {}
+              target: {}
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+      - type: custom:mushroom-title-card
+        title: Individuelle stearinlys grupper
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: script.stearinlys_coop_on
+            icon_color: orange
+            primary: Tænd Coop Stearinlys
+            layout: vertical
+          - type: custom:mushroom-template-card
+            icon: mdi:candle
+            entity: script.stearinlys_coop_off
+            icon_color: blue
+            primary: Sluk Coop Stearinlys
+            layout: vertical
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Tænd Sirius Stearinlys
+            icon: mdi:candle
+            entity: script.stearinlys_sirius_on
+            icon_color: orange
+            layout: vertical
+          - type: custom:mushroom-template-card
+            primary: Sluk Sirius Stearinlys
+            icon: mdi:candle
+            entity: script.lyskadesirius_off
+            icon_color: blue
+            layout: vertical
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Tænd Sirius2 Stearinlys
+            icon: mdi:candle
+            entity: script.stearinlys_sirius2_on
+            layout: vertical
+            icon_color: orange
+          - type: custom:mushroom-template-card
+            primary: Sluk Sirius2 Stearinlys
+            icon: mdi:candle
+            entity: script.stearinlys_sirius2_off
+            icon_color: blue
+            layout: vertical
+  - theme: Backend-selected
+    title: sikkerhed
+    path: security
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:mushroom-alarm-control-panel-card
+        entity: alarm_control_panel.master
+        states:
+          - armed_home
+          - armed_away
+        hide_state: false
+        name: Alarm
+      - type: custom:mushroom-title-card
+        title: Dør Sensorer
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: entity
+            entity: binary_sensor.openclose_18
+            icon: mdi:door
+            name: Entre
+            content_info: name
+          - type: entity
+            entity: binary_sensor.openclose_19
+            name: Garage
+            content_info: name
+            icon: mdi:door
+          - type: entity
+            entity: binary_sensor.openclose_20
+            name: Terrasse
+            icon: mdi:door
+            content_info: name
+          - type: entity
+            entity: binary_sensor.openclose_14
+            name: Terrasse2
+            icon: mdi:door
+            content_info: name
+          - type: entity
+            entity: binary_sensor.openclose_21
+            name: Port
+            icon: mdi:garage-variant
+            content_info: name
+        alignment: center
+      - type: custom:mushroom-title-card
+        title: Bevægelses sensorer
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: entity
+            entity: binary_sensor.presence_2
+            name: Entre
+            content_info: name
+          - type: entity
+            entity: binary_sensor.presence_25
+            name: Garage
+            content_info: name
+          - type: entity
+            entity: binary_sensor.tradfri_motion_sensor
+            name: Bryggers
+            content_info: name
+          - type: entity
+            entity: binary_sensor.tradfri_motion_sensor_2
+            name: Depot
+            content_info: name
+          - type: entity
+            entity: binary_sensor.presence_45
+            name: Cykelskur
+            content_info: name
+        alignment: center
+      - show_state: false
+        show_name: true
+        camera_view: live
+        type: picture-entity
+        entity: camera.tapocam1_hd
+        camera_image: camera.tapocam1_hd
+        name: Bagside kamera
+      - show_state: false
+        show_name: true
+        camera_view: auto
+        type: picture-entity
+        entity: camera.isg_cam_01w_prof0_name
+        image: https://demo.home-assistant.io/stub_config/bedroom.png
+        camera_image: camera.isg_cam_01w_prof0_name
+        name: Garage kamera
+  - theme: Backend-selected
+    title: kontor
+    path: kontor
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - hours_to_show: 48
+            graph: line
+            type: sensor
+            detail: 1
+            entity: sensor.gulvvarme_2_kontor_temperatur
+            name: Temperatur
+          - type: custom:mushroom-chips-card
+            chips: []
+  - theme: Backend-selected
+    title: cykelskur
+    path: cykelskur
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+  - theme: Backend-selected
+    title: remote
+    path: remote
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: picture-elements
+        elements:
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Power
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: power
+            style:
+              top: 07%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Source
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: source
+            style:
+              top: 07%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap1
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap1
+            style:
+              top: 14%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap2
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap2
+            style:
+              top: 14%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap3
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap3
+            style:
+              top: 14%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap4
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap4
+            style:
+              top: 19%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap5
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap5
+            style:
+              top: 19%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap6
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap6
+            style:
+              top: 19%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap7
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap7
+            style:
+              top: 24%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap8
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap8
+            style:
+              top: 24%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap9
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap9
+            style:
+              top: 24%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: Knap0
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: knap0
+            style:
+              top: 29%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: previouschannel
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: previouschannel
+            style:
+              top: 29%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: vol_plus
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: vol_plus
+            style:
+              top: 36%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: vol_minus
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: vol_minus
+            style:
+              top: 44%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: kanal_plus
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: kanal_plus
+            style:
+              top: 36%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: mute
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: mute
+            style:
+              top: 36%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: guide
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: guide
+            style:
+              top: 51%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: info
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: info
+            style:
+              top: 57%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: return
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: return
+            style:
+              top: 70%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: exit
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: exit
+            style:
+              top: 70%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: enter
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: enter
+            style:
+              top: 63%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: op
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: op
+            style:
+              top: 57%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: ned
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: ned
+            style:
+              top: 69%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: venstre
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: venstre
+            style:
+              top: 63%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: hojre
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: hojre
+            style:
+              top: 63%
+              left: 76%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: rod
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: rod
+            style:
+              top: 74%
+              left: 20%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: gron
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: gron
+            style:
+              top: 74%
+              left: 38%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: gul
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: gul
+            style:
+              top: 74%
+              left: 59%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: bla
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: bla
+            style:
+              top: 74%
+              left: 79%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: stop
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: stop
+            style:
+              top: 80%
+              left: 79%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: reverse
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: reverse
+            style:
+              top: 83%
+              left: 20%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: play
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: play
+            style:
+              top: 83%
+              left: 38%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: pause
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: pause
+            style:
+              top: 83%
+              left: 59%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: forward
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: forward
+            style:
+              top: 83%
+              left: 78%
+              width: 15%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: tools
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: tools
+            style:
+              top: 57%
+              left: 22%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: menu
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: menu
+            style:
+              top: 51%
+              left: 49%
+              width: 18%
+          - entity: remote.wi_fi_universal_remote_remote
+            state_image:
+              'on': /local/pics/remote/transknap.png
+              'off': /local/pics/remote/transknap.png
+            type: image
+            name: mediap
+            tap_action:
+              action: call-service
+              service: remote.send_command
+              service_data:
+                entity_id: remote.wi_fi_universal_remote_remote
+                device: TVStue
+                command: mediap
+            style:
+              top: 51%
+              left: 22%
+              width: 18%
+        image: /local/pics/remote/samsungremote_150.png
+  - theme: Backend-selected
+    title: guestbathroom
+    path: guestbathroom
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.guestbathroom
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.guestbathroomceiling
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            name: Loft
+          - type: custom:mushroom-light-card
+            entity: light.guestbathroommirror
+            show_brightness_control: true
+            tap_action:
+              action: toggle
+            name: Spejl
+      - hours_to_show: 48
+        graph: line
+        type: sensor
+        entity: sensor.gulvvarme_3_lillebad_temperatur
+        detail: 1
+        name: Temperatur
+  - theme: Backend-selected
+    title: bathroom
+    path: bathroom
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.masterbathroom
+            show_brightness_control: true
+            name: Badeværelse
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.masterbathroommirror
+            name: Spejl
+            show_brightness_control: true
+      - hours_to_show: 48
+        graph: line
+        type: sensor
+        entity: sensor.gulvvarme_8_stortbad_temperatur
+        detail: 1
+        name: Temperatur
+  - theme: Backend-selected
+    title: teknik
+    path: teknik
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+          - type: template
+            entity: person.johnny
+            icon: mdi:human-male
+            content: Johnny
+            icon_color: >-
+              {% if is_state('person.johnny', 'home') %} green {% else %} red {%
+              endif %}
+            tap_action:
+              action: more-info
+          - type: template
+            entity: person.karin
+            icon: mdi:human-female
+            content: Karin
+            icon_color: >-
+              {% if is_state('person.karin', 'home') %} green {% else %} red {%
+              endif %}
+            tap_action:
+              action: more-info
+          - type: template
+            entity: person.mikkel
+            icon: mdi:human-male
+            content: Mikkel
+            icon_color: >-
+              {% if is_state('person.mikkel', 'home') %} green {% else %} red {%
+              endif %}
+            tap_action:
+              action: more-info
+          - type: template
+            entity: person.mads
+            icon: mdi:human-male
+            content: Mads
+            icon_color: >-
+              {% if is_state('person.mads', 'home') %} green {% else %} red {%
+              endif %}
+            tap_action:
+              action: more-info
+        alignment: center
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-template-card
+            icon: mdi:home
+            icon_color: light-blue
+            tap_action:
+              action: navigate
+              navigation_path: home
+            layout: vertical
+            primary: Hjem
+          - type: custom:mushroom-template-card
+            icon: mdi:lightbulb-outline
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: lys
+            primary: Lys
+            icon_color: orange
+          - type: custom:mushroom-template-card
+            icon: mdi:gauge
+            icon_color: green
+            primary: Varme
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: varme
+          - type: custom:mushroom-template-card
+            icon: mdi:flash-outline
+            primary: Strøm
+            layout: vertical
+            tap_action:
+              action: navigate
+              navigation_path: power
+            hold_action:
+              action: none
+            double_tap_action:
+              action: none
+            icon_color: yellow
+          - type: custom:mushroom-template-card
+            icon: mdi:battery-outline
+            layout: vertical
+            primary: Batteri
+            icon_color: red
+            tap_action:
+              action: navigate
+              navigation_path: batterier
+  - theme: Backend-selected
+    title: lys
+    path: lys
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:auto-entities
+        card:
+          type: entities
+        filter:
+          include:
+            - domain: light
+              options: {}
+          exclude: []
+  - theme: Backend-selected
+    title: varme
+    path: varme
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: custom:mushroom-title-card
+        title: Gulvvarme Termostater
+      - type: custom:auto-entities
+        card:
+          type: entities
+        filter:
+          include:
+            - state: heat
+          exclude: []
+      - type: custom:mushroom-title-card
+        title: Vamepumpe
+      - type: custom:auto-entities
+        card:
+          type: entities
+        filter:
+          include:
+            - device: 'F1245-6 E - 89878 : master : climate system 1'
+            - device: 'F1245-6 E - 89878 : master : status'
+            - device: 'F1245-6 E - 89878 : master : compressor module'
+            - device: F1245-6 E - 89878
+          exclude: []
+  - theme: Backend-selected
+    title: power
+    path: power
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.sm_active_energy
+            name: Forbrug
+          - type: custom:mushroom-entity-card
+            entity: sensor.sm_counterreading
+            name: Måler visning
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.sm_current1
+            name: Fase1
+          - type: custom:mushroom-entity-card
+            entity: sensor.sm_current2
+            name: Fase2
+          - type: custom:mushroom-entity-card
+            entity: sensor.sm_current3
+            name: Fase3
+      - type: custom:mushroom-entity-card
+        entity: sensor.sm_voltage
+        name: Spænding
+        icon: mdi:flash-outline
+      - type: gauge
+        entity: sensor.sm_activepower
+        min: 0
+        severity:
+          green: 0
+          yellow: 1.5
+          red: 2.2
+        max: 3
+        name: Strømforbrug lige nu
+      - type: custom:config-template-card
+        entities:
+          - sensor.nordpool_kwh_dk1_dkk_3_095_025
+        card:
+          type: custom:apexcharts-card
+          graph_span: 1d
+          experimental:
+            color_threshold: true
+          header:
+            title: El Pris vs. samlet forbrug - sidste 24 timer
+            show: true
+          hours_12: false
+          yaxis:
+            - id: first
+              decimals: 1
+              apex_config:
+                tickAmount: 4
+            - id: second
+              opposite: true
+              decimals: 3
+              apex_config:
+                tickAmount: 4
+          series:
+            - entity: sensor.sm_activepower
+              yaxis_id: first
+              name: Forbrug
+              stroke_width: 2
+              color: var(--app-header-text-color)
+              show:
+                legend_value: false
+              group_by:
+                duration: 1h
+                func: avg
+            - entity: sensor.nordpool_kwh_dk1_dkk_3_095_025
+              type: column
+              yaxis_id: second
+              name: Pris
+              show:
+                legend_value: false
+              group_by:
+                duration: 1h
+                func: last
+              color_threshold:
+                - value: 0
+                  color: green
+                - value: >-
+                    ${ Number(states['sensor.nordpool_avg'].state) -
+                    (Number(states['sensor.nordpool_avg'].state)-Number(states['sensor.nordpool_min'].state))
+                    * 0.5 }
+                  color: orange
+                - value: ${ Number(states['sensor.nordpool_avg'].state)  }
+                  color: red
+                - value: >-
+                    ${ Number(states['sensor.nordpool_avg'].state) +
+                    (Number(states['sensor.nordpool_max'].state)-Number(states['sensor.nordpool_avg'].state))
+                    * 0.5 }
+                  color: darkred
+      - type: custom:config-template-card
+        view_layout:
+          grid-area: pri1
+        entities:
+          - sensor.nordpool_kwh_dk1_dkk_3_095_025
+        card:
+          type: custom:apexcharts-card
+          graph_span: 36h
+          experimental:
+            color_threshold: true
+          header:
+            title: Strømpris de næste 24 timer (kr/kWh)
+            show: true
+          yaxis:
+            - min: ${Math.min(states['sensor.nordpool_min'].state)}
+              decimals: 3
+          hours_12: false
+          span:
+            start: hour
+            offset: '-0h'
+          now:
+            show: true
+            label: Nu
+          series:
+            - entity: sensor.nordpool_kwh_dk1_dkk_3_095_025
+              type: column
+              data_generator: >
+                return (entity.attributes.raw_today.map((start, index) => {
+                  return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                })).concat(entity.attributes.raw_tomorrow.map((start, index) =>
+                {
+                  return [new Date(start["start"]).getTime(), entity.attributes.raw_tomorrow[index]["value"]];
+                }));
+              color_threshold:
+                - value: 0
+                  color: green
+                - value: >-
+                    ${ Number(states['sensor.nordpool_avg'].state) -
+                    (Number(states['sensor.nordpool_avg'].state)-Number(states['sensor.nordpool_min'].state))
+                    * 0.5 }
+                  color: orange
+                - value: ${ Number(states['sensor.nordpool_avg'].state)  }
+                  color: red
+                - value: >-
+                    ${ Number(states['sensor.nordpool_avg'].state) +
+                    (Number(states['sensor.nordpool_max'].state)-Number(states['sensor.nordpool_avg'].state))
+                    * 0.5 }
+                  color: darkred
+  - theme: Backend-selected
+    title: batterier
+    path: batterier
+    badges: []
+    cards:
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: back
+      - entities:
+          - card:
+              height: 2vh
+              positions:
+                icon: 'off'
+                indicator: inside
+                name: outside
+                value: inside
+              severity:
+                - color: Red
+                  from: 0
+                  to: 10
+                - color: orange
+                  from: 11
+                  to: 20
+                - color: yellow
+                  from: 21
+                  to: 40
+                - color: lightGreen
+                  from: 41
+                  to: 60
+                - color: green
+                  from: 61
+                  to: 100
+              type: custom:bar-card
+              width: 40%
+            filter:
+              exclude:
+                - attributes:
+                    is_charging: false
+                - attributes:
+                    is_charging: true
+              include:
+                - attributes:
+                    device_class: battery
+                    unit_of_measurement: '%'
+                  domain: sensor
+                  state: < 75
+            sort:
+              method: state
+              numeric: true
+            type: custom:auto-entities
+        show_header_toggle: false
+        title: Batterier
+        type: entities
